@@ -1,4 +1,5 @@
 import { Button, Card } from "react-bootstrap";
+import { useShoppingCart } from "../context/shoppingCartContext";
 import { formatCurrency } from "../utilities/FormatCurrency";
 
 type StoreItemProps = {
@@ -8,10 +9,18 @@ type StoreItemProps = {
   imgUrl: string;
 };
 export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
-  let quantity = 1;
+  const {
+    getItemQuantity,
+    increaseCartQuantity,
+    decreaseCartQuantity,
+    removeFromCart,
+  } = useShoppingCart();
+  const quantity = getItemQuantity(id);
+  // let quantity = 0;
+
   return (
     <div>
-      <Card>
+      <Card className="h-100">
         <Card.Img
           src={imgUrl}
           variant="top"
@@ -33,7 +42,12 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
           */}
           <div className="mt-auto">
             {quantity === 0 ? (
-              <Button className="w-100">+ Add to cart</Button>
+              <Button
+                onClick={() => increaseCartQuantity(id)}
+                className="w-100"
+              >
+                + Add to cart
+              </Button>
             ) : (
               <div
                 style={{ gap: "0.5rem" }}
@@ -43,15 +57,19 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
                   className="d-flex align-items-center"
                   style={{ gap: "0.5rem" }}
                 >
-                  <Button>-</Button>
+                  <Button onClick={() => decreaseCartQuantity(id)}>-</Button>
                   <div>
                     {/* You can use <span> to wrap inline-level elements,
                     in order to apply styling or behavior to just that portion of the content: */}
                     <span className="fs-3">{quantity} </span> in cart
                   </div>
-                  <Button>+</Button>
+                  <Button onClick={() => increaseCartQuantity(id)}>+</Button>
                 </div>
-                <Button variant="danger" size="sm">
+                <Button
+                  onClick={() => removeFromCart(id)}
+                  variant="danger"
+                  size="sm"
+                >
                   Remove
                 </Button>
               </div>
