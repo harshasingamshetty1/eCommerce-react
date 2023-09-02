@@ -19,6 +19,11 @@ export function Navbar() {
         </Nav.Link>
         {cartQuantity > 0 ? (
           <Button
+            // here as openCart does not have any params required
+            // therefore, directly passed the reference, by not calling it
+            // but if we had some param like openCart(id), then we must use
+            // (()=> openCart(id)) bcoz, or else, it would become a function call and
+            //will be called everytime comp renders, instead of onClick
             onClick={openCart}
             style={{ width: "3rem", height: "3rem", position: "relative" }}
             //variant: set "outline-primary,"
